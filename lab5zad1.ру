@@ -1,0 +1,22 @@
+import re
+
+# Вводим строку с клавиатуры
+text: str = input("Введите строку: ").strip()
+
+if not text:
+    print("Ошибка: введена пустая строка.")
+else:
+    # Извлекаем слова (только буквы, без знаков препинания и спецсимволов)
+    words: list[str] = re.findall(r"[А-Яа-яЁёA-Za-z]+", text)
+
+    if not words:
+        print("В строке не найдено ни одного слова.")
+    else:
+        count: int = len(words)
+        longest: str = max(words, key=len)
+        shortest: str = min(words, key=len)
+
+        # Выводим результаты с пояснениями
+        print(f"Количество слов: {count}")
+        print(f"Самое длинное слово:  '{longest}' (длина: {len(longest)})")
+        print(f"Самое короткое слово: '{shortest}' (длина: {len(shortest)})")

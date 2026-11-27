@@ -1,0 +1,47 @@
+import re
+
+EMAIL_RE = re.compile(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$")
+PHONE_RE = re.compile(r"^(\+7|8)[\s-]?\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$")
+
+def validate_file(filename: str) -> None:
+    """Проверяет email и телефоны в файле, выводя ошибки с номерами строк."""
+    valid_count: int = 0
+    errors: list[str] = []
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+        if not lines:
+            raise ValueError("Файл пуст — нет данных для проверки.")
+
+        for num, raw in enumerate(lines, start=1):
+            val = raw.strip()
+            if not val:
+                continue
+            if EMAIL_RE.match(val):
+                print(f"Строка {num}: OK (email)   -> {val}")
+                valid_count += 1
+            elif PHONE_RE.match(val):
+                print(f"Строка {num}: OK (телефон) -> {val}")
+                valid_count += 1
+            else:
+                errors.append(f"Строка {num}: некорректный формат -> '{val}'")
+
+        print(f"\nУспешно проверено записей: {valid_count}")
+        if errors:
+            print("Найденные ошибки:")
+            for err in errors:
+                print("  -", err)
+    except FileNotFoundError:
+        print(f"Ошибка: файл '{filename}' не найден.")
+    except PermissionError:
+        print(f"Ошибка: нет прав доступа к файлу '{filename}'.")
+    except UnicodeDecodeError:
+        print("Ошибка: неверная кодировка файла (ожидается UTF-8).")
+    except ValueError as e:
+        print(f"Ошибка данных: {e}")
+    finally:
+        print("Проверка файла завершена.")
+
+if __name__ == "__main__":
+    path = input("Введите имя файла для проверки: ").strip() or "contacts.txt"
+    validate_file(path)

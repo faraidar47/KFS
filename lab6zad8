@@ -1,0 +1,42 @@
+def read_text() -> str:
+    """Запрашивает строку у пользователя и убирает лишние пробелы."""
+    return input("Введите строку: ").strip()
+
+def WordCount(text: str) -> int:
+    """Возвращает количество слов в строке."""
+    return len(text.split())
+
+def Reverse(text: str) -> str:
+    """Возвращает строку, записанную в обратном порядке."""
+    return text[::-1]
+
+def ToUpperFirst(text: str) -> str:
+    """Делает заглавной первую букву каждого слова."""
+    return " ".join(w[0].upper() + w[1:] for w in text.split())
+
+def IsPalindrome(text: str) -> bool:
+    """Проверяет, является ли строка палиндромом (без регистра и пробелов)."""
+    cleaned: str = "".join(ch.lower() for ch in text if ch.isalnum())
+    return bool(cleaned) and cleaned == cleaned[::-1]
+
+def print_results(text: str, words: int, rev: str, upper: str, pal: bool) -> None:
+    """Выводит результаты обработки строки в читаемом виде."""
+    print(f"Исходная строка:    {text}")
+    print(f"Количество слов:    {words}")
+    print(f"Реверс строки:      {rev}")
+    print(f"С заглавной буквы:  {upper}")
+    print(f"Палиндром:          {'Да' if pal else 'Нет'}")
+
+def main() -> None:
+    """Точка входа: ввод данных, вызов функций обработки и вывод."""
+    text: str = read_text()
+    if not text:
+        print("Ошибка: введена пустая строка.")
+        return
+    print_results(
+        text, WordCount(text), Reverse(text),
+        ToUpperFirst(text), IsPalindrome(text)
+    )
+
+if __name__ == "__main__":
+    main()

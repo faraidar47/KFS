@@ -1,0 +1,59 @@
+from abc import ABC, abstractmethod
+
+class Character(ABC):
+    """Абстрактный базовый класс игрового персонажа."""
+
+    def __init__(self, name: str, hp: int) -> None:
+        self.name = name
+        self.hp = hp
+
+    @abstractmethod
+    def Attack(self) -> str:
+        """Абстрактный метод атаки, переопределяемый в наследниках."""
+        pass
+
+    def info(self) -> str:
+        return f"{self.__class__.__name__} '{self.name}' (HP: {self.hp})"
+
+class Warrior(Character):
+    def __init__(self, name: str, hp: int = 150, dmg: int = 35) -> None:
+        super().__init__(name, hp)
+        self.dmg = dmg
+
+    def Attack(self) -> str:
+        return f"{self.name} наносит удар мечом (урон: {self.dmg})!"
+
+class Mage(Character):
+    def __init__(self, name: str, hp: int = 90, dmg: int = 50) -> None:
+        super().__init__(name, hp)
+        self.dmg = dmg
+
+    def Attack(self) -> str:
+        return f"{self.name} запускает огненный шар (урон: {self.dmg})!"
+
+class Archer(Character):
+    def __init__(self, name: str, hp: int = 110, dmg: int = 30) -> None:
+        super().__init__(name, hp)
+        self.dmg = dmg
+
+    def Attack(self) -> str:
+        return f"{self.name} выпускает точную стрелу (урон: {self.dmg})!"
+
+def run_battle(party: list[Character]) -> None:
+    """Полиморфный вызов Attack() (принцип подстановки Лисков)."""
+    print("\n--- Состав отряда ---")
+    for hero in party:
+        print(hero.info())
+    print("\n--- Раунд атаки ---")
+    for hero in party:
+        print(hero.Attack())
+
+def main() -> None:
+    w_name = input("Имя воина: ").strip() or "Артас"
+    m_name = input("Имя мага: ").strip() or "Мерлин"
+    a_name = input("Имя лучника: ").strip() or "Леголас"
+    party: list[Character] = [Warrior(w_name), Mage(m_name), Archer(a_name)]
+    run_battle(party)
+
+if __name__ == "__main__":
+    main()
